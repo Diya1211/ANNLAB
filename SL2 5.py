@@ -1,0 +1,35 @@
+import numpy as np
+
+class BAM:
+    def __init__(self, x_pairs, y_pairs):
+        self.W = np.zeros((y_pairs[0].shape[0], x_pairs[0].shape[0]))
+        for x, y in zip(x_pairs, y_pairs):
+            self.W += np.outer(y, x)
+
+    def threshold(self, vec):
+        return np.where(vec >= 0, 1, -1)
+
+    def forward(self, x):
+        y_raw = np.dot(self.W, x)
+        return self.threshold(y_raw)
+
+    def backward(self, y):
+        x_raw = np.dot(self.W.T, y)
+        return self.threshold(x_raw)
+
+x1 = np.array([1, 1, 1, -1])
+y1 = np.array([1, -1])
+x2 = np.array([-1, -1, 1, 1])
+y2 = np.array([-1, 1])
+
+bam_net = BAM([x1, x2], [y1, y2])
+
+print("--- Forward Testing (X -> Y) ---")
+test_x = np.array([1, -1, -1, -1])
+retrieved_y = bam_net.forward(test_x)
+print(f"Input X: {test_x} -> Predicted Y: {retrieved_y}")
+
+print("\n--- Backward Testing (Y -> X) ---")
+test_y = np.array([1, -1])
+retrieved_x = bam_net.backward(test_y)
+print(f"Input Y: {test_y} -> Predicted X: {retrieved_x}")
