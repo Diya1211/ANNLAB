@@ -1,0 +1,34 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def linear(x):
+    return x
+
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
+
+def relu(x):
+    return np.maximum(0,x)
+
+def tanh(x):
+    return np.tanh(x)
+
+x = np.linspace(-10, 10, 100)
+functions = [("Linear", linear(x)),
+             ("Sigmoid", sigmoid(x)),
+             ("ReLU", relu(x)),
+             ("Tanh", tanh(x))]
+
+plt.figure(figsize=(12,8))
+
+for i, (name, y) in enumerate(functions, 1):
+    plt.subplot(2, 2, i)
+    plt.plot(x, y, label=name, color='red', linewidth=2)
+    plt.title(f"{name} Activation Function")
+    plt.grid(True, linestyle='--', alpha=0.6)
+    plt.axhline(0, color='black', linewidth=1)
+    plt.axvline(0, color='black', linewidth=1)
+    plt.legend()
+
+plt.tight_layout()
+plt.show()
